@@ -1,0 +1,36 @@
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<script type=text/javascript src="{{url_for('static', filename='jquery-3.4.0.min.js') }}"></script>
+<script type=text/javascript>
+  $(function() {
+    $('a#calculate').bind('click', function() {
+      $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+        a: $('input[name="a"]').val(),
+        b: $('input[name="b"]').val()
+      }, function(data) {
+        $("#result").text(data.result);
+      });
+      return false;
+    });
+
+    $('a#exec_code').bind('click', function() {
+      $.getJSON($SCRIPT_ROOT + '/_exec', {
+        code: $('textarea[name="code"]').val()
+      }, function(data) {
+        $("#exec_result").text(data.result);
+      });
+      return false;
+    });
+  });
+</script>
+
+<h1>Polling Example</h1>
+<p><input type=text size=5 name=a> +
+   <input type=text size=5 name=b> =
+   <span id=result>?</span>
+<p><a href=# id=calculate>calculate server side</a>
+
+<p><textarea name="code" cols="80"></textarea></p>
+<p><span id=exec_result>?</span></p>
+<p><a href=# id=exec_code>execute server side</a>
